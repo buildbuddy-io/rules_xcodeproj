@@ -243,7 +243,7 @@ the launch action buildConfiguration did not match for \(scheme.name)
             launchAction.launchAutomaticallySubstyle,
             expectedLaunchAutomaticallySubstyle,
             """
-"launchAction.launchAutomaticallySubstyle did not match for \(scheme.name)
+launchAction.launchAutomaticallySubstyle did not match for \(scheme.name)
 """,
             file: file,
             line: line
