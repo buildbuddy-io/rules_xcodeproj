@@ -126,7 +126,7 @@ Xcode.IDEFoundation.Launcher.PosixSpawn
             profileAction: profileAction,
             analyzeAction: analyzeAction,
             archiveAction: archiveAction,
-            wasCreatedForAppExtension: nil
+            wasCreatedForAppExtension: productType.isExtension ? true : nil
         )
     }
 

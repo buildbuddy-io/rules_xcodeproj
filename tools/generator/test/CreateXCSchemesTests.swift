@@ -31,6 +31,7 @@ class CreateXCSchemesTests: XCTestCase {
         shouldExpectBuildableProductRunnable: Bool,
         shouldExpectLaunchMacroExpansion: Bool,
         shouldExpectLaunchEnvVariables: Bool,
+        expectedWasCreatedForAppExtension: Bool? = nil,
         expectedSelectedDebuggerIdentifier: String = XCScheme.defaultDebugger,
         expectedSelectedLauncherIdentifier: String = XCScheme.defaultLauncher,
         expectedLaunchAutomaticallySubstyle: String? = nil,
@@ -121,6 +122,12 @@ fi
         )
         XCTAssertNotNil(
             scheme.version,
+            file: file,
+            line: line
+        )
+        XCTAssertEqual(
+            scheme.wasCreatedForAppExtension,
+            expectedWasCreatedForAppExtension,
             file: file,
             line: line
         )
@@ -392,6 +399,7 @@ the archive action buildConfiguration did not match for \(scheme.name)
             shouldExpectBuildableProductRunnable: true,
             shouldExpectLaunchMacroExpansion: false,
             shouldExpectLaunchEnvVariables: false,
+            expectedWasCreatedForAppExtension: true,
             expectedSelectedDebuggerIdentifier: "",
             expectedSelectedLauncherIdentifier: """
 Xcode.IDEFoundation.Launcher.PosixSpawn
@@ -475,6 +483,7 @@ Xcode.IDEFoundation.Launcher.PosixSpawn
             shouldExpectBuildableProductRunnable: true,
             shouldExpectLaunchMacroExpansion: false,
             shouldExpectLaunchEnvVariables: true,
+            expectedWasCreatedForAppExtension: true,
             expectedSelectedDebuggerIdentifier: "",
             expectedSelectedLauncherIdentifier: """
 Xcode.IDEFoundation.Launcher.PosixSpawn
