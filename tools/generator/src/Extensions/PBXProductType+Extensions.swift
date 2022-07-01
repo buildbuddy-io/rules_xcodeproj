@@ -241,6 +241,11 @@ extension PBXProductType {
         return isLaunchable ? .bazelLaunchVariables : nil
     }
 
+    var canUseDebugLauncher: Bool {
+        // Extensions don't use the lldb launcher
+        return !isExtension
+    }
+
     var launchAutomaticallySubstyle: String? {
         return isExtension ? "2" : nil
     }

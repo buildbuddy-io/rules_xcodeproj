@@ -31,6 +31,8 @@ class CreateXCSchemesTests: XCTestCase {
         shouldExpectBuildableProductRunnable: Bool,
         shouldExpectLaunchMacroExpansion: Bool,
         shouldExpectLaunchEnvVariables: Bool,
+        expectedSelectedDebuggerIdentifier: String = XCScheme.defaultDebugger,
+        expectedSelectedLauncherIdentifier: String = XCScheme.defaultLauncher,
         expectedLaunchAutomaticallySubstyle: String? = nil,
         file: StaticString = #filePath,
         line: UInt = #line
@@ -240,6 +242,24 @@ the launch action buildConfiguration did not match for \(scheme.name)
             line: line
         )
         XCTAssertEqual(
+            launchAction.selectedDebuggerIdentifier,
+            expectedSelectedDebuggerIdentifier,
+            """
+selectedDebuggerIdentifier did not match for \(scheme.name)
+""",
+            file: file,
+            line: line
+        )
+        XCTAssertEqual(
+            launchAction.selectedLauncherIdentifier,
+            expectedSelectedLauncherIdentifier,
+            """
+selectedLauncherIdentifier did not match for \(scheme.name)
+""",
+            file: file,
+            line: line
+        )
+        XCTAssertEqual(
             launchAction.launchAutomaticallySubstyle,
             expectedLaunchAutomaticallySubstyle,
             """
@@ -372,6 +392,10 @@ the archive action buildConfiguration did not match for \(scheme.name)
             shouldExpectBuildableProductRunnable: true,
             shouldExpectLaunchMacroExpansion: false,
             shouldExpectLaunchEnvVariables: false,
+            expectedSelectedDebuggerIdentifier: "",
+            expectedSelectedLauncherIdentifier: """
+Xcode.IDEFoundation.Launcher.PosixSpawn
+""",
             expectedLaunchAutomaticallySubstyle: "2"
         )
     }
@@ -451,6 +475,10 @@ the archive action buildConfiguration did not match for \(scheme.name)
             shouldExpectBuildableProductRunnable: true,
             shouldExpectLaunchMacroExpansion: false,
             shouldExpectLaunchEnvVariables: true,
+            expectedSelectedDebuggerIdentifier: "",
+            expectedSelectedLauncherIdentifier: """
+Xcode.IDEFoundation.Launcher.PosixSpawn
+""",
             expectedLaunchAutomaticallySubstyle: "2",
             file: file,
             line: line
