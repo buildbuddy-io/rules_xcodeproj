@@ -31,6 +31,7 @@ class CreateXCSchemesTests: XCTestCase {
         shouldExpectBuildableProductRunnable: Bool,
         shouldExpectLaunchMacroExpansion: Bool,
         shouldExpectLaunchEnvVariables: Bool,
+        expectedLaunchAutomaticallySubstyle: String? = nil,
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws {
@@ -204,7 +205,9 @@ fi
         XCTAssertEqual(
             launchAction.buildConfiguration,
             expectedBuildConfigurationName,
-            "the launch action buildConfiguration did not match for \(scheme.name)",
+            """
+the launch action buildConfiguration did not match for \(scheme.name)
+""",
             file: file,
             line: line
         )
@@ -236,6 +239,15 @@ fi
             file: file,
             line: line
         )
+        XCTAssertEqual(
+            launchAction.launchAutomaticallySubstyle,
+            expectedLaunchAutomaticallySubstyle,
+            """
+"launchAction.launchAutomaticallySubstyle did not match for \(scheme.name)
+""",
+            file: file,
+            line: line
+        )
 
         guard let analyzeAction = scheme.analyzeAction else {
             XCTFail(
@@ -248,7 +260,9 @@ fi
         XCTAssertEqual(
             analyzeAction.buildConfiguration,
             expectedBuildConfigurationName,
-            "the analyze action buildConfiguration did not match for \(scheme.name)",
+            """
+the analyze action buildConfiguration did not match for \(scheme.name)
+""",
             file: file,
             line: line
         )
@@ -264,7 +278,9 @@ fi
         XCTAssertEqual(
             archiveAction.buildConfiguration,
             expectedBuildConfigurationName,
-            "the archive action buildConfiguration did not match for \(scheme.name)",
+            """
+the archive action buildConfiguration did not match for \(scheme.name)
+""",
             file: file,
             line: line
         )
@@ -345,6 +361,19 @@ fi
             shouldExpectLaunchMacroExpansion: false,
             shouldExpectLaunchEnvVariables: false
         )
+
+        // App Extension
+        try assertScheme(
+            schemesDict: schemesDict,
+            targetKey: "WKE",
+            buildPreActions: .none,
+            shouldExpectBuildActionEntries: true,
+            shouldExpectTestables: false,
+            shouldExpectBuildableProductRunnable: true,
+            shouldExpectLaunchMacroExpansion: false,
+            shouldExpectLaunchEnvVariables: false,
+            expectedLaunchAutomaticallySubstyle: "2"
+        )
     }
 
     func assertBazelSchemes(
@@ -408,6 +437,21 @@ fi
             shouldExpectBuildableProductRunnable: true,
             shouldExpectLaunchMacroExpansion: false,
             shouldExpectLaunchEnvVariables: true,
+            file: file,
+            line: line
+        )
+
+        // App Extension
+        try assertScheme(
+            schemesDict: schemesDict,
+            targetKey: "WKE",
+            buildPreActions: .set,
+            shouldExpectBuildActionEntries: true,
+            shouldExpectTestables: false,
+            shouldExpectBuildableProductRunnable: true,
+            shouldExpectLaunchMacroExpansion: false,
+            shouldExpectLaunchEnvVariables: true,
+            expectedLaunchAutomaticallySubstyle: "2",
             file: file,
             line: line
         )

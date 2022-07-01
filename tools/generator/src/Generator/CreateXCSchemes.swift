@@ -85,6 +85,8 @@ extension Generator {
             macroExpansion: macroExpansion,
             environmentVariables: buildMode.usesBazelEnvironmentVariables ?
                 pbxTarget.productType?.bazelLaunchEnvironmentVariables : nil,
+            launchAutomaticallySubstyle:
+                pbxTarget.productType?.launchAutomaticallySubstyle,
             customLLDBInitFile: "$(BAZEL_LLDB_INIT)"
         )
         let profileAction = XCScheme.ProfileAction(
