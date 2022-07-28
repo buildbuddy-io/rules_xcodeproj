@@ -12,6 +12,7 @@
 			buildConfigurationList = A4C19F2824EAB3EBB5D7EE24 /* Build configuration list for PBXAggregateTarget "BazelDependencies" */;
 			buildPhases = (
 				773C70B69E7F801B38FDC01C /* Generate Files */,
+				2FB8CA190C5FD287F83F39E3 /* Create swift_debug_settings.py */,
 			);
 			dependencies = (
 			);
@@ -737,6 +738,23 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2FB8CA190C5FD287F83F39E3 /* Create swift_debug_settings.py */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(INTERNAL_DIR)/swift_debug_settings.py",
+			);
+			name = "Create swift_debug_settings.py";
+			outputPaths = (
+				"$(BUILD_DIR)/swift_debug_settings.py",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "perl -pe 's/\\$(\\()?([a-zA-Z_]\\w*)(?(1)\\))/$ENV{$2}/g' \\\n  \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			showEnvVarsInLog = 0;
+		};
 		773C70B69E7F801B38FDC01C /* Generate Files */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -1007,7 +1025,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = c_lib;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin",
 				);
 			};
@@ -1037,7 +1055,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GENERATE_INFOPLIST_FILE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
-				OTHER_SWIFT_FLAGS = "-Xcc -ivfsoverlay -Xcc $(BUILD_DIR)/xcode-overlay.yaml -Xcc -ivfsoverlay -Xcc $(BUILD_DIR)/gen_dir-overlay.yaml -vfsoverlay $(BUILD_DIR)/gen_dir-overlay.yaml -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/lib/lib_impl.swift.modulemap -Xcc -fmodule-map-file=examples/command_line/swift_c_module/c_lib.modulemap -Xcc -fmodule-map-file=$(BAZEL_EXTERNAL)/examples_command_line_external/ExternalFramework.framework/Modules/module.modulemap -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/external/examples_command_line_external/Library.swift.modulemap -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/lib/private_lib.swift.modulemap -Xcc -O0 -Xcc -DDEBUG=1 -Xcc -fstack-protector -Xcc -fstack-protector-all -Xcc -DSECRET_3=\"Hello\" -Xcc -DSECRET_2=\"World!\" -Fexternal/examples_command_line_external -static";
+				OTHER_SWIFT_FLAGS = "-Xcc -ivfsoverlay -Xcc $(BUILD_DIR)/xcode-overlay.yaml -Xcc -ivfsoverlay -Xcc $(BUILD_DIR)/gen_dir-overlay.yaml -vfsoverlay $(BUILD_DIR)/gen_dir-overlay.yaml -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/lib/lib_impl.swift.modulemap -Xcc -fmodule-map-file=$(PROJECT_DIR)/examples/command_line/swift_c_module/c_lib.modulemap -Xcc -fmodule-map-file=$(BAZEL_EXTERNAL)/examples_command_line_external/ExternalFramework.framework/Modules/module.modulemap -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/external/examples_command_line_external/Library.swift.modulemap -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/lib/private_lib.swift.modulemap -Xcc -O0 -Xcc -DDEBUG=1 -Xcc -fstack-protector -Xcc -fstack-protector-all -Xcc -DSECRET_3=\"Hello\" -Xcc -DSECRET_2=\"World!\" -Fexternal/examples_command_line_external -static";
 				PRODUCT_MODULE_NAME = LibSwift;
 				PRODUCT_NAME = lib_swift;
 				SDKROOT = macosx;
@@ -1049,7 +1067,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = lib_swift;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin",
 					"$(BAZEL_EXTERNAL)/examples_command_line_external",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/external/examples_command_line_external",
@@ -1113,7 +1131,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = private_lib;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin",
 				);
 			};
@@ -1141,7 +1159,7 @@
 				LINK_PARAMS_FILE = "$(INTERNAL_DIR)/targets/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/examples/command_line/Tests/LibSwiftTests.__internal__.__test_bundle.link.params";
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				OTHER_LDFLAGS = "@$(DERIVED_FILE_DIR)/link.params";
-				OTHER_SWIFT_FLAGS = "-Xcc -ivfsoverlay -Xcc $(BUILD_DIR)/xcode-overlay.yaml -Xcc -ivfsoverlay -Xcc $(BUILD_DIR)/gen_dir-overlay.yaml -vfsoverlay $(BUILD_DIR)/gen_dir-overlay.yaml -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/lib/lib_impl.swift.modulemap -Xcc -fmodule-map-file=examples/command_line/swift_c_module/c_lib.modulemap -Xcc -fmodule-map-file=$(BAZEL_EXTERNAL)/examples_command_line_external/ExternalFramework.framework/Modules/module.modulemap -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/external/examples_command_line_external/Library.swift.modulemap -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/lib/lib_swift.swift.modulemap -Xcc -O0 -Xcc -DDEBUG=1 -Xcc -fstack-protector -Xcc -fstack-protector-all -Xcc -DSECRET_3=\"Hello\" -Xcc -DSECRET_2=\"World!\" -Fexternal/examples_command_line_external -static";
+				OTHER_SWIFT_FLAGS = "-Xcc -ivfsoverlay -Xcc $(BUILD_DIR)/xcode-overlay.yaml -Xcc -ivfsoverlay -Xcc $(BUILD_DIR)/gen_dir-overlay.yaml -vfsoverlay $(BUILD_DIR)/gen_dir-overlay.yaml -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/lib/lib_impl.swift.modulemap -Xcc -fmodule-map-file=$(PROJECT_DIR)/examples/command_line/swift_c_module/c_lib.modulemap -Xcc -fmodule-map-file=$(BAZEL_EXTERNAL)/examples_command_line_external/ExternalFramework.framework/Modules/module.modulemap -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/external/examples_command_line_external/Library.swift.modulemap -Xcc -fmodule-map-file=$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/lib/lib_swift.swift.modulemap -Xcc -O0 -Xcc -DDEBUG=1 -Xcc -fstack-protector -Xcc -fstack-protector-all -Xcc -DSECRET_3=\"Hello\" -Xcc -DSECRET_2=\"World!\" -Fexternal/examples_command_line_external -static";
 				PRODUCT_BUNDLE_IDENTIFIER = com.bazelbuild.rulesapple.Tests;
 				PRODUCT_MODULE_NAME = LibSwiftTestsLib;
 				PRODUCT_NAME = LibSwiftTests;
@@ -1154,7 +1172,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = LibSwiftTests.__internal__.__test_bundle;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin",
 					"$(BAZEL_EXTERNAL)/examples_command_line_external",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/external/examples_command_line_external",
@@ -1221,7 +1239,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = private_swift_lib;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin",
 				);
 			};
@@ -1251,9 +1269,9 @@
 					"SECRET_2=\\\"World!\\\"",
 				);
 				HEADER_SEARCH_PATHS = (
-					"\"examples/command_line/lib/dir with space\"",
+					"\"$(PROJECT_DIR)/examples/command_line/lib/dir with space\"",
 					"\"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/lib/dir with space\"",
-					examples/command_line/lib/private,
+					"$(PROJECT_DIR)/examples/command_line/lib/private",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/lib/private",
 				);
 				INFOPLIST_FILE = "$(GEN_DIR)/applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/examples/command_line/tool/rules_xcodeproj/tool/Info.plist";
@@ -1323,7 +1341,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = tool;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin",
 					"$(BAZEL_EXTERNAL)/examples_command_line_external",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin/external/examples_command_line_external",
@@ -1413,7 +1431,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = lib_impl;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/macos-x86_64-min11.0-applebin_macos-darwin_x86_64-dbg-ST-3e9e205cb29c/bin",
 				);
 			};

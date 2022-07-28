@@ -39,6 +39,7 @@ extension Generator {
     static let externalFileListPath: Path = "external.xcfilelist"
     static let appRsyncExcludeFileListPath: Path = "app.exclude.rsynclist"
     static let generatedFileListPath: Path = "generated.xcfilelist"
+    static let lldbSwiftSettingsModulePath: Path = "swift_debug_settings.py"
 
     private static let localizedGroupExtensions: Set<String> = [
         "intentdefinition",
@@ -521,6 +522,7 @@ extension Generator {
             break
         }
 
+        var lldbSettingsMap: [String: LLDBSettings] = [:]
         for target in targets.values {
             let linkopts = try target
                 .allLinkerFlags(
@@ -532,7 +534,133 @@ extension Generator {
                 files[try target.linkParamsFilePath()] =
                     .nonReferencedContent(linkopts.joined())
             }
+
+            if let lldbContext = target.lldbContext {
+                // TODO: Handle frameworks correctly
+                let modulePath = target.executablePath
+
+                let frameworks = try lldbContext.frameworkSearchPaths
+                    .map { filePath -> String in
+                        return try filePathResolver
+                            .resolve(
+                                filePath,
+                                useOriginalGeneratedFiles: true
+                            )
+                            .string
+                    }
+
+                let includes = try lldbContext.swiftmodules
+                    .map { filePath -> String in
+                        var dir = filePath
+                        dir.path = dir.path.parent().normalize()
+                        return try filePathResolver
+                            .resolve(
+                                dir,
+                                useOriginalGeneratedFiles:
+                                    !xcodeGeneratedFiles.contains(filePath)
+                            )
+                            .string
+                    }
+                    .uniqued()
+
+                let clangFrameworkArgs = frameworks.map { #""-F\#($0)""# }
+                let clangOtherArgs = try lldbContext.clang.map { clang in
+                    return try clang.toClangExtraArgs(
+                        filePathResolver: filePathResolver
+                    )
+                }
+
+                let clang = (clangFrameworkArgs + clangOtherArgs)
+                    .joined(separator: " ")
+
+                lldbSettingsMap[modulePath] = LLDBSettings(
+                    frameworks: frameworks,
+                    includes: includes,
+                    clang: clang
+                )
+            }
         }
+
+        let jsonEncoder = JSONEncoder()
+        jsonEncoder.keyEncodingStrategy = .convertToSnakeCase
+        jsonEncoder.outputFormatting = [
+            .prettyPrinted,
+            .sortedKeys,
+            .withoutEscapingSlashes,
+        ]
+
+        let lldbSettingsMapJSON = String(
+            data: try jsonEncoder.encode(lldbSettingsMap),
+            encoding: .utf8
+        )!
+
+        let lldbSwiftSettingsModule = #"""
+#!/usr/bin/python3
+
+"""An lldb module that registers a stop hook to set swift settings."""
+
+import lldb
+
+_SETTINGS = \#(lldbSettingsMapJSON)
+
+def __lldb_init_module(debugger, _internal_dict):
+    # Register the stop hook when this module is loaded in lldb
+    debugger.HandleCommand(
+        "target stop-hook add -P swift_debug_settings.StopHook",
+    )
+
+class StopHook:
+    "An lldb stop hook class, that sets swift settings for the current module."
+
+    def __init__(self, _target, _extra_args, _internal_dict):
+        pass
+
+    def handle_stop(self, exe_ctx, _stream):
+        "Method that is called when the user stops in lldb."
+        module = exe_ctx.frame.module.file.__get_fullpath__()
+        settings = _SETTINGS.get(module)
+        if settings:
+            frameworks = " ".join([
+                f'"{path}"'
+                for path in settings["frameworks"]
+            ])
+            if frameworks:
+                lldb.debugger.HandleCommand(
+                    f"settings set -- target.swift-framework-search-paths {frameworks}",
+                )
+            else:
+                lldb.debugger.HandleCommand(
+                    f"settings clear target.swift-framework-search-paths",
+                )
+
+            includes = " ".join([
+                f'"{path}"'
+                for path in settings["includes"]
+            ])
+            if includes:
+                lldb.debugger.HandleCommand(
+                    f"settings set -- target.swift-module-search-paths {includes}",
+                )
+            else:
+                lldb.debugger.HandleCommand(
+                    f"settings clear target.swift-module-search-paths",
+                )
+
+            clang = settings["clang"]
+            if clang:
+                lldb.debugger.HandleCommand(
+                    f"settings set -- target.swift-extra-clang-flags '{clang}'",
+                )
+            else:
+                lldb.debugger.HandleCommand(
+                    f"settings clear target.swift-extra-clang-flags",
+                )
+
+        return True
+"""#
+
+        files[.internal(lldbSwiftSettingsModulePath)] =
+            .nonReferencedContent(lldbSwiftSettingsModule)
 
         // Handle special groups
 
@@ -597,6 +725,90 @@ extension Generator {
 
             container.currentVersion = versionFile
         }
+    }
+}
+
+// MARK: - Private Types
+
+private struct LLDBSettings: Equatable, Encodable {
+    let frameworks: [String]
+    let includes: [String]
+    let clang: String
+}
+
+// MARK: - Extensions
+
+private extension Target {
+    var executablePath: String {
+        let bundlePath =
+            "$(BUILD_DIR)/\(packageBinDir)/\(product.path.path.lastComponent)"
+
+        guard product.type.isBundle else {
+            return bundlePath
+        }
+
+        let executableName = product.executableName ??
+            product.path.path.lastComponentWithoutExtension
+
+        if platform.os == .macOS {
+            return "\(bundlePath)/Contents/MacOS/\(executableName)"
+        } else {
+            return "\(bundlePath)/\(executableName)"
+        }
+    }
+}
+
+private extension LLDBContext.Clang {
+    func toClangExtraArgs(filePathResolver: FilePathResolver) throws -> String {
+        let quoteIncludesArgs: [String] = try quoteIncludes.map { filePath in
+            let path = try filePathResolver
+                .resolve(
+                    filePath,
+                    useOriginalGeneratedFiles: true
+                )
+                .string
+            return #"-iquote "\#(path)""#
+        }
+
+        let includesArgs: [String] = try includes.map { filePath in
+            let path = try filePathResolver
+                .resolve(
+                    filePath,
+                    useOriginalGeneratedFiles: true
+                )
+                .string
+            return #"-I "\#(path)""#
+        }
+
+        let systemIncludesArgs: [String] = try systemIncludes.map { filePath in
+            let path = try filePathResolver
+                .resolve(
+                    filePath,
+                    useOriginalGeneratedFiles: true
+                )
+                .string
+            return #"-isystem "\#(path)""#
+        }
+
+
+        let modulemapArgs: [String] = try modulemaps.map { filePath in
+            let modulemap = try filePathResolver
+                .resolve(
+                    filePath,
+                    useOriginalGeneratedFiles: true
+                )
+                .string
+            return #"-fmodule-map-file="\#(modulemap)""#
+        }
+
+        return (
+            quoteIncludesArgs +
+            includesArgs +
+            systemIncludesArgs +
+            modulemapArgs +
+            (opts.map { [$0] } ?? [])
+        )
+            .joined(separator: " ")
     }
 }
 

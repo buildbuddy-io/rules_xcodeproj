@@ -12,6 +12,7 @@
 			buildConfigurationList = 914277EC9F57B808A8817CF5 /* Build configuration list for PBXAggregateTarget "BazelDependencies" */;
 			buildPhases = (
 				9A630CF63C380FAE522825A9 /* Bazel Build */,
+				20BEB4AE7798C11A8A904F5E /* Create swift_debug_settings.py */,
 			);
 			dependencies = (
 			);
@@ -872,6 +873,23 @@
 			shellScript = "set -euo pipefail\n\n\"$BAZEL_INTEGRATION_DIR/copy_outputs.sh\" \\\n  \"_BazelForcedCompile_.swift\" \\\n  \"ExampleObjcTests.xctest\" \\\n  \"\"\n";
 			showEnvVarsInLog = 0;
 		};
+		20BEB4AE7798C11A8A904F5E /* Create swift_debug_settings.py */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(INTERNAL_DIR)/swift_debug_settings.py",
+			);
+			name = "Create swift_debug_settings.py";
+			outputPaths = (
+				"$(BUILD_DIR)/swift_debug_settings.py",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "perl -pe 's/\\$(\\()?([a-zA-Z_]\\w*)(?(1)\\))/$ENV{$2}/g' \\\n  \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			showEnvVarsInLog = 0;
+		};
 		21D8AA3BEA3F6C89F37D75A1 /* Copy Bazel Outputs */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -1253,7 +1271,7 @@
 					AWESOME,
 				);
 				HEADER_SEARCH_PATHS = (
-					CoreUtilsObjC,
+					"$(PROJECT_DIR)/CoreUtilsObjC",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/CoreUtilsObjC",
 				);
 				INFOPLIST_FILE = "$(GEN_DIR)/applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/ExampleObjcTests/rules_xcodeproj/ExampleObjcTests.__internal__.__test_bundle/Info.plist";
@@ -1332,7 +1350,7 @@
 				TARGET_NAME = ExampleObjcTests.__internal__.__test_bundle;
 				TEST_HOST = "$(BUILD_DIR)/bazel-out/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/Example/Example.app/Example_ExecutableName";
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin",
 				);
 			};
@@ -1362,7 +1380,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = TestingUtils;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin",
 				);
 			};
@@ -1403,7 +1421,7 @@
 				TARGET_NAME = ExampleUITests.__internal__.__test_bundle;
 				TEST_TARGET_NAME = Example;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin",
 				);
 			};
@@ -1431,14 +1449,14 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_BITCODE = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREFIX_HEADER = CoreUtilsObjC/CoreUtils/CoreUtils.pch;
+				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/CoreUtilsObjC/CoreUtils/CoreUtils.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"_FORTIFY_SOURCE=1",
 					OS_IOS,
 					"DEBUG=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					CoreUtilsObjC,
+					"$(PROJECT_DIR)/CoreUtilsObjC",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/CoreUtilsObjC",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1510,7 +1528,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = CoreUtilsObjC;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin",
 				);
 			};
@@ -1533,7 +1551,7 @@
 					"DEBUG=1",
 				);
 				HEADER_SEARCH_PATHS = (
-					CoreUtilsObjC,
+					"$(PROJECT_DIR)/CoreUtilsObjC",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/CoreUtilsObjC",
 				);
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1605,7 +1623,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = Utils;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin",
 				);
 			};
@@ -1663,7 +1681,7 @@
 				BAZEL_PACKAGE_BIN_DIR = "bazel-out/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/Example";
 				BAZEL_TARGET_ID = "//Example:Example applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217";
 				BUILT_PRODUCTS_DIR = "$(CONFIGURATION_BUILD_DIR)";
-				CODE_SIGN_ENTITLEMENTS = Example/app.entitlements;
+				CODE_SIGN_ENTITLEMENTS = "$(PROJECT_DIR)/Example/app.entitlements";
 				CODE_SIGN_STYLE = Manual;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEPLOYMENT_LOCATION = NO;
@@ -1672,7 +1690,7 @@
 				EXECUTABLE_NAME = Example_ExecutableName;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				HEADER_SEARCH_PATHS = (
-					CoreUtilsObjC,
+					"$(PROJECT_DIR)/CoreUtilsObjC",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/CoreUtilsObjC",
 				);
 				INFOPLIST_FILE = "$(GEN_DIR)/applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/Example/rules_xcodeproj/Example/Info.plist";
@@ -1697,7 +1715,7 @@
 				TARGETED_DEVICE_FAMILY = 1;
 				TARGET_NAME = Example;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin",
 				);
 			};
@@ -1721,7 +1739,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = AWESOME;
 				HEADER_SEARCH_PATHS = (
-					CoreUtilsObjC,
+					"$(PROJECT_DIR)/CoreUtilsObjC",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/CoreUtilsObjC",
 				);
 				INFOPLIST_FILE = "$(GEN_DIR)/applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/ExampleTests/rules_xcodeproj/ExampleTests.__internal__.__test_bundle/Info.plist";
@@ -1745,7 +1763,7 @@
 				TARGET_NAME = ExampleTests.__internal__.__test_bundle;
 				TEST_HOST = "$(BUILD_DIR)/bazel-out/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin/Example/Example.app/Example_ExecutableName";
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/ios-x86_64-min15.0-applebin_ios-ios_x86_64-dbg-ST-a0d0e3b8f217/bin",
 				);
 			};

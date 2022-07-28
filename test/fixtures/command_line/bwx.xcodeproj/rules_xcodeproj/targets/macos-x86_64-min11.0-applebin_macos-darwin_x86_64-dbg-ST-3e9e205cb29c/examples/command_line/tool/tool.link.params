@@ -23,4 +23,4 @@ $(BAZEL_EXTERNAL)/examples_command_line_external/ImportableLibrary/libImportable
 -force_load
 $(BAZEL_EXTERNAL)/examples_command_line_external/ExternalFramework.framework/ExternalFramework
 -exported_symbols_list
-examples/command_line/tool/export_symbol_list.exp
+$(PROJECT_DIR)/examples/command_line/tool/export_symbol_list.exp

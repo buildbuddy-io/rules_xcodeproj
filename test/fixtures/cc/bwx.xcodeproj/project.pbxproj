@@ -12,6 +12,7 @@
 			buildConfigurationList = A4C19F2824EAB3EBB5D7EE24 /* Build configuration list for PBXAggregateTarget "BazelDependencies" */;
 			buildPhases = (
 				790733B6E675C2785F8020AC /* Fetch External Repositories */,
+				2FB8CA190C5FD287F83F39E3 /* Create swift_debug_settings.py */,
 			);
 			dependencies = (
 			);
@@ -366,6 +367,23 @@
 /* End PBXProject section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		2FB8CA190C5FD287F83F39E3 /* Create swift_debug_settings.py */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"$(INTERNAL_DIR)/swift_debug_settings.py",
+			);
+			name = "Create swift_debug_settings.py";
+			outputPaths = (
+				"$(BUILD_DIR)/swift_debug_settings.py",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "perl -pe 's/\\$(\\()?([a-zA-Z_]\\w*)(?(1)\\))/$ENV{$2}/g' \\\n  \"$SCRIPT_INPUT_FILE_0\" > \"$SCRIPT_OUTPUT_FILE_0\"\n";
+			showEnvVarsInLog = 0;
+		};
 		790733B6E675C2785F8020AC /* Fetch External Repositories */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
@@ -505,7 +523,7 @@
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = (
-					examples/cc/lib/private,
+					"$(PROJECT_DIR)/examples/cc/lib/private",
 					"$(BAZEL_OUT)/darwin_x86_64-dbg-ST-02316c4eb12c/bin/examples/cc/lib/private",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
@@ -547,7 +565,7 @@
 				SWIFT_VERSION = 5;
 				TARGET_NAME = lib_impl;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/darwin_x86_64-dbg-ST-02316c4eb12c/bin",
 				);
 			};
@@ -655,12 +673,12 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					examples/cc/lib2/includes,
+					"$(PROJECT_DIR)/examples/cc/lib2/includes",
 					"$(BAZEL_OUT)/darwin_x86_64-dbg-ST-02316c4eb12c/bin/examples/cc/lib2/includes",
 				);
 				TARGET_NAME = lib_impl;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/darwin_x86_64-dbg-ST-02316c4eb12c/bin",
 				);
 			};
@@ -728,12 +746,12 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5;
 				SYSTEM_HEADER_SEARCH_PATHS = (
-					examples/cc/lib2/includes,
+					"$(PROJECT_DIR)/examples/cc/lib2/includes",
 					"$(BAZEL_OUT)/darwin_x86_64-dbg-ST-02316c4eb12c/bin/examples/cc/lib2/includes",
 				);
 				TARGET_NAME = tool;
 				USER_HEADER_SEARCH_PATHS = (
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/darwin_x86_64-dbg-ST-02316c4eb12c/bin",
 					"$(BAZEL_EXTERNAL)/examples_cc_external",
 					"$(BAZEL_OUT)/darwin_x86_64-dbg-ST-02316c4eb12c/bin/external/examples_cc_external",
@@ -806,7 +824,7 @@
 				USER_HEADER_SEARCH_PATHS = (
 					"$(BAZEL_EXTERNAL)/examples_cc_external",
 					"$(BAZEL_OUT)/darwin_x86_64-dbg-ST-02316c4eb12c/bin/external/examples_cc_external",
-					.,
+					"$(PROJECT_DIR)",
 					"$(BAZEL_OUT)/darwin_x86_64-dbg-ST-02316c4eb12c/bin",
 				);
 			};
