@@ -43,12 +43,22 @@ struct Platform: Equatable, Hashable, Decodable {
     let os: OS
     let variant: Variant
     let arch: String
-    let minimumOsVersion: OSVersion
+    var minimumOsVersion: OSVersion
 }
 
 extension Platform {
     var triple: String {
         return "\(arch)-apple-\(variant.triple)"
+    }
+
+    mutating func merge(_ other: Platform) {
+        minimumOsVersion = other.minimumOsVersion
+    }
+
+    func merging(_ other: Platform) -> Platform {
+        var platform = self
+        platform.merge(other)
+        return platform
     }
 }
 

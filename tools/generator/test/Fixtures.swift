@@ -48,6 +48,7 @@ enum Fixtures {
     static let targets: [TargetID: Target] = [
         "A 1": Target.mock(
             packageBinDir: "bazel-out/a1b2c/bin/A 1",
+            platform: .macOS(minimumOsVersion: "10.0"),
             product: .init(
                 type: .staticLibrary,
                 name: "a",
@@ -79,6 +80,7 @@ enum Fixtures {
         ),
         "A 2": Target.mock(
             packageBinDir: "bazel-out/a1b2c/bin/A 2",
+            platform: .macOS(minimumOsVersion: "11.0"),
             product: .init(
                 type: .application,
                 name: "A",
